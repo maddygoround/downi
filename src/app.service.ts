@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt'
 import { hash , compare} from "bcrypt";
 import { Account, AuthResponse } from './interface/interface';
 import { DatabaseService } from './database/database.service';
+import { Role } from './enum/enum';
 
 
 @Injectable()
@@ -29,10 +30,8 @@ export class AppService {
   constructor(private readonly databaseService: DatabaseService,private readonly jwtService: JwtService) {
     this.operatorId = AccountId.fromString(process.env.OPERATOR_ID);
     this.operatorKey = PrivateKey.fromString(process.env.OPERATOR_PVKEY);
-    // this.treasuryId = AccountId.fromString(process.env.TREASURY_ID);
-    // this.treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
-    // // this.aliceId = AccountId.fromString(process.env.ALICE_ID);
-    // // this.aliceyKey = PrivateKey.fromString(process.env.ALICE_PVKEY);
+    this.treasuryId = AccountId.fromString(process.env.TREASURY_ID);
+    this.treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
     this.client = Client.forTestnet().setOperator(this.operatorId, this.operatorKey);
     this.client.setDefaultMaxTransactionFee(new Hbar(0.75));
     this.client.setMaxQueryPayment(new Hbar(0.75));
@@ -74,6 +73,7 @@ export class AppService {
 
     const saltRounds = 10;
     const hashPasswd = await hash(user.password, saltRounds);
+    user.role = Role.USER;
     user.password = hashPasswd;
     user.username = user.username.toLowerCase();
     user = { ...user, ...await this.createHederaAccount() }
@@ -117,7 +117,4 @@ export class AppService {
     return balanceCheckTx.tokens._map.get(tokenId.toString());
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
 }

@@ -6,10 +6,6 @@ import { Account } from './interface/interface';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
 
   @Post('/account/login')
   async login(@Req() req : any )  {
@@ -28,5 +24,7 @@ export class AppController {
     } as Account
     return await this.appService.registerUser(user);
   }
+
+
 
 }

@@ -11,7 +11,6 @@ type Collection = 'users'
 export class DatabaseService {
 
     private database: lowdb.LowdbAsync<any>;
-    private collection = 'users'
     
     constructor() {
         this.initDatabase('users');
