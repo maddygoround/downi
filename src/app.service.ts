@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common';
 import {
   Client,
   AccountId,
@@ -6,6 +6,7 @@ import {
   TokenInfoQuery,
   AccountBalanceQuery,
   AccountCreateTransaction,
+  TokenCreateTransaction,
   Hbar,
   TokenId
 } from '@hashgraph/sdk';
@@ -14,10 +15,10 @@ import { hash , compare} from "bcrypt";
 import { Account, AuthResponse } from './interface/interface';
 import { DatabaseService } from './database/database.service';
 import { Role } from './enum/enum';
-
+import * as fs from 'fs';
 
 @Injectable()
-export class AppService {
+export class AppService implements OnModuleInit {
 
   public readonly operatorId: AccountId;
   public readonly operatorKey: PrivateKey;
@@ -26,6 +27,7 @@ export class AppService {
   public readonly aliceId: AccountId;
   public readonly aliceyKey: PrivateKey;
   private readonly client: Client;
+  public  tokenId : TokenId;
 
   constructor(private readonly databaseService: DatabaseService,private readonly jwtService: JwtService) {
     this.operatorId = AccountId.fromString(process.env.OPERATOR_ID);
@@ -37,6 +39,23 @@ export class AppService {
     this.client.setMaxQueryPayment(new Hbar(0.75));
   }
 
+
+  async onModuleInit() {
+    console.log(`Initialization Token...`);
+    const tokenCreateTx = await new TokenCreateTransaction()
+      .setTokenName("downi")
+      .setTokenSymbol("DOW")
+      .setDecimals(0)
+      .setInitialSupply(1000)
+      .setTreasuryAccountId(this.treasuryId)
+      .setAdminKey(this.treasuryKey)
+      .setSupplyKey(this.treasuryKey)
+      .freezeWith(this.client)
+      .sign(this.treasuryKey);
+    const tokenCreateSubmit = await tokenCreateTx.execute(this.client);
+    const tokenCreateRx = await tokenCreateSubmit.getReceipt(this.client);
+    this.tokenId = tokenCreateRx.tokenId;
+  }
 
 
   async login(user: Account)  : Promise<AuthResponse> {
@@ -104,6 +123,11 @@ export class AppService {
       publicKey: newAccountPublicKey.toStringRaw()
     }
   }
+
+  // async accountBalance(accountId:string) {
+  //   const account = AccountId.fromString(accountId);
+  //   return await bCheckerFcn(account,TokenId);
+  // }
 
   async tQueryFcn(tId: TokenId) {
     let info = await new TokenInfoQuery().setTokenId(tId).execute(this.client);

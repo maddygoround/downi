@@ -1,4 +1,31 @@
 {
-  "organizations": [],
-  "users": []
+  "users": [
+    {
+      "username": "mahendra",
+      "password": "$2a$10$dDE5IUA.voDsi5QxM4GGvuftXQxUuAtoqERzGO1nmAKffgj/AcZLS",
+      "role": "admin",
+      "accountId": "0.0.34033783",
+      "solAccountId": "0000000000000000000000000000000002075077",
+      "publicKey": "302a300506032b6570032100e5cb23ca384dc9cd1eeacd24f6ac1c5b8b2556db3cbfe24a850ed065e5104d2c",
+      "privateKey": "302e020100300506032b65700422042018ab49649b7fbdf8f29a3f69d5824e6800c9a058434840ac37e502fe629cd06b"
+    },
+    {
+      "username": "maddy@im.com",
+      "password": "$2b$10$jzaqZKPsJgY95fuwdgWIgeA/87H7jqej2SkbrCbtLLx8M9EJcXN62",
+      "role": "user",
+      "accountId": "0.0.34055289",
+      "solAccountId": "000000000000000000000000000000000207a479",
+      "privateKey": "e2ab30ff56e2a5ca7f921e31d89433097fd2db55a2c24d82fa8c05ab9f9c9140",
+      "publicKey": "3c98b1fdf188f96094f8331d8738980c4fc1b4207341da1055fc098c173d0f95"
+    },
+    {
+      "username": "maddy@im1.com",
+      "password": "$2b$10$WgUNcnO8DrujNX/5QObB2e2AMO2fVNA6dmnZFDDPjsFfN06dhQCQ.",
+      "role": "user",
+      "accountId": "0.0.34055290",
+      "solAccountId": "000000000000000000000000000000000207a47a",
+      "privateKey": "7d78e598f35d8f2869a3c9d95357b3ccacd344e136ceaa7bfb941e091d489c96",
+      "publicKey": "b61d1f6019990255de24d4bf3cbb7c1d961a3a206dc3c0a80bc384117beeaabc"
+    }
+  ]
 }
